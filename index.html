@@ -603,9 +603,9 @@
       "مرحبا، اريد المزيد من الإستفسار حول المنتج الترويجي ؟";
 
     const whatsappURL =
-      "https://wa.me/" +
+      "https://api.whatsapp.com/send?phone=" +
       WHATSAPP_NUMBER +
-      "?text=" +
+      "&text=" +
       encodeURIComponent(WHATSAPP_MESSAGE);
 
 
@@ -629,27 +629,24 @@
       }
 
       /*
-        InitiateCheckout
-        مع Content ID الخاص بـ SELS BEAUTY
+        تتبع أحداث TikTok Pixel إذا كان البكسل معرفاً
       */
-      ttq.track("InitiateCheckout", {
-        content_id: "SELS_BEAUTY_WHATSAPP"
-      });
+      if (typeof ttq !== "undefined" && ttq.track) {
+        ttq.track("InitiateCheckout", {
+          content_id: "SELS_BEAUTY_WHATSAPP"
+        });
+
+        ttq.track("Contact");
+      }
 
       /*
-        Contact
+        التحويل مباشرة إلى الواتساب
       */
-      ttq.track("Contact");
-
-      /*
-        إعطاء TikTok Pixel وقتاً لإرسال الأحداث
-        قبل فتح واتساب
-      */
-      const whatsappURL = this.href;
+      const targetURL = this.href || whatsappURL;
 
       setTimeout(function () {
-        window.location.href = whatsappURL;
-      }, 180);
+        window.location.href = targetURL;
+      }, 150);
     }
 
 
